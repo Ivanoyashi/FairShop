@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+option csharp_namespace = "FairShop.Profile";
+
+package fairshop_profile;
+
+import "google/protobuf/wrappers.proto";
+import "common.proto";
+
+service ProfileService {
+  // Getting profile
+  rpc GetProfile (GetProfileRequest) returns (GetProfileResponse);
+
+  // Creating new profile. Avaible non-authenticated
+  rpc RegisterProfile (RegisterProfileRequest) returns (RegisterProfileResponse); 
+
+  // Log in user. Avaible non-authenticated
+  rpc LogIn (LogInRequest) returns (LogInResponse);
+
+  rpc LogOut (LogOutRequest) returns (LogOutResponse);
+}
+
+message GetProfileRequest {
+  string profile_id = 1;
+}
+
+message GetProfileResponse {
+  oneof result {
+    GetProfileMessage Profile = 1;
+    common.Error Error = 2;
+  }
+}
+
+message GetProfileMessage {
+  google.protobuf.StringValue fio = 1;
+  google.protobuf.StringValue phone = 2;
+  google.protobuf.StringValue email = 3;
+}
+
+message RegisterProfileRequest {
+  google.protobuf.StringValue fio = 1;
+  google.protobuf.StringValue phone = 2;
+  google.protobuf.StringValue email = 3;
+  string password = 4;
+}
+
+message RegisterProfileResponse {
+  oneof result {
+    bool Success = 1;
+    common.Error Error = 2;
+  }
+}
+
+message LogInRequest {
+  google.protobuf.StringValue phone = 2;
+  google.protobuf.StringValue email = 3;
+  string password = 4;
+}
+
+message LogInResponse {
+  oneof result {
+    bool Success = 1;
+    common.Error Error = 2;
+  }
+}
+
+message LogOutRequest {
+  string profile_id = 1;
+}
+
+message LogOutResponse {
+  oneof result {
+    bool Success = 1;
+    common.Error Error = 2;
+  }
+}
